@@ -80,4 +80,45 @@ public class Main {
 
         return maxSum;
     }
+    public static Queue<Integer> createQueue(int[] a)
+    {
+        Queue<Integer> q = new Queue<>();
+        for(int i = 0; i<a.length; i++)
+        {
+            q.insert(a[i]);
+        }
+        return q;
+    }
+    
+    public static Queue<Integer> copyQueue(Queue<Integer> q)
+    {
+        Queue<Integer>copy = new Queue<>();
+        while(!q.isEmpty())
+        {
+            int x = q.remove();
+            copy.insert(x);
+        }
+        return copy;
+    }
+
+    public static int getMax(Queue<Integer> q)
+    {
+        Queue<Integer> copy = copyQueue(q);
+        int max = Integer.MIN_VALUE;
+        while(!copy.isEmpty())
+        {
+            int x = copy.remove();
+            if(x>max)
+            {
+                max = x;
+            }
+        }
+        return max;
+    }
+
+    public static int numOfDigits(int a)
+    {
+        int num = (int)Math.log10(a)+1;
+        return num;
+    }
 }
