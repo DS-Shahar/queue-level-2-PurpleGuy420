@@ -1,124 +1,220 @@
-public class Main {
-    public static void main(String[] args) {
-
-    }
-
-    public static Queue<Integer> countSequences(Queue<Integer> q) {
-        Queue<Integer> result = new Queue<>();
-
-        if (q.isEmpty())
-            return result;
-
-        int current = q.remove();
-        int count = 1;
-
-        while (!q.isEmpty()) {
-            int next = q.remove();
-
-            if (next == current) {
-                count++;
-            } else {
-                result.insert(count);
-                current = next;
-                count = 1;
-            }
-        }
-
-        result.insert(count);
-
-        return result;
-    }
-
-    public static Queue<Integer> mergeQueues(Queue<Integer> q1, Queue<Integer> q2) {
-        Queue<Integer> result = new Queue<>();
-
-        while (!q1.isEmpty() && !q2.isEmpty()) {
-            if (q1.head() <= q2.head()) {
-                result.insert(q1.remove());
-            } else {
-                result.insert(q2.remove());
-            }
-        }
-
-        while (!q1.isEmpty()) {
-            result.insert(q1.remove());
-        }
-        
-        while (!q2.isEmpty()) {
-            result.insert(q2.remove());
-        }
-
-        return result;
-    }
-
-    public static int sumLongestEvenSequence(Queue<Integer> q) {
-        int maxLength = 0;
-        int maxSum = 0;
-
-        int currentLength = 0;
-        int currentSum = 0;
-
-        while (!q.isEmpty()) {
-            int num = q.remove();
-
-            if (num % 2 == 0) {
-                currentLength++;
-                currentSum += num;
-            } else {
-                if (currentLength > maxLength) {
-                    maxLength = currentLength;
-                    maxSum = currentSum;
-                }
-                currentLength = 0;
-                currentSum = 0;
-            }
-        }
-        
-        if (currentLength > maxLength) {
-            maxSum = currentSum;
-        }
-
-        return maxSum;
-    }
-    public static Queue<Integer> createQueue(int[] a)
+public class Main
+{
+	public static void main(String[] args)
+	{
+		
+	}
+    
+    public static <T> void printQueue(Queue<T> q1)
     {
-        Queue<Integer> q = new Queue<>();
-        for(int i = 0; i<a.length; i++)
-        {
-            q.insert(a[i]);
-        }
-        return q;
+       Queue <T> q2 = copyQueue(q1);      
+       while (!q2.isEmpty())
+       {
+        System.out.println(q2.remove());
+       }
     }
     
-    public static Queue<Integer> copyQueue(Queue<Integer> q)
+	public static <T> Queue<T> copyQueue(Queue<T> q1)
     {
-        Queue<Integer>copy = new Queue<>();
-        while(!q.isEmpty())
+        Queue<T> q2 = new Queue<T>();
+        Queue<T> q3 = new Queue<T>();
+        
+        while (!q1.isEmpty())
         {
-            int x = q.remove();
-            copy.insert(x);
+            T x = q1.remove();
+            q2.insert(x);
+            q3.insert(x);
+        }  
+        
+        while (!q3.isEmpty())
+        {
+            q1.insert(q3.remove());
         }
-        return copy;
+        
+        return q2;      
     }
-
-    public static int getMax(Queue<Integer> q)
+    
+    public static Queue<Integer> level2_ex1(Queue<Character> q1)
     {
-        Queue<Integer> copy = copyQueue(q);
-        int max = Integer.MIN_VALUE;
-        while(!copy.isEmpty())
+        Queue<Character> q2 = copyQueue(q1);
+        Queue<Integer> q3 = new Queue<>();
+        
+        char a = q2.remove();
+        int x = 1;
+        while (!q2.isEmpty())
         {
-            int x = copy.remove();
-            if(x>max)
+            char b = q2.remove();
+            if (a==b)
+               x++;
+                
+            else
             {
-                max = x;
+                q3.insert(x);
+                x=1;
+            }
+            a=b;        
+        }
+        
+        q3.insert(x);
+        return q3;  
+    }
+    
+    public static boolean level2_ex2(Queue<String> q1)
+    {
+        Queue<String> q2 = copyQueue(q1);
+        Queue<String> q3 = copyQueue(q1);
+        int x = 0;
+        
+        while(!q3.isEmpty())
+        {
+            x++;
+            q3.remove();
+        }
+        for (int i=0; i<x; i++)
+        {
+            String b = q2.remove();
+            q3 = copyQueue(q1);
+            
+            for (int j=0; j<x; j++)
+            {
+                String c=q3.remove();
+                
+                if (i!=j)
+                {
+                    if (b.equals(c))
+                        return true;
+                }
             }
         }
-        return max;
+        return false;
     }
-
-    public static int numOfDigits(int a)
+    
+    public static Queue<Integer> deleteNum(Queue<Integer> q1, int a)
     {
-        int num = (int)Math.log10(a)+1;
-        return num;
+        Queue<Integer> q2 = copyQueue(q1);
+        Queue<Integer> q3 = new Queue<>();
+        while (!q2.isEmpty())
+        {   
+            int x = q2.remove();
+            if (x != a)
+               q3.insert(x);
+        }
+        return q3;
+    }
+    
+    public static <T> boolean isIn(Queue<T> q1, T a)
+    {
+        Queue<T> q2 = copyQueue(q1);
+        
+        while (!q2.isEmpty())
+        {
+            if (q2.remove().equals(a))
+                return true;
+        } 
+        return false;   
+    }
+    
+    public static Queue<Integer> level2_ex3(Queue<Integer> q1)
+    {
+        Queue<Integer> q2 = copyQueue(q1);
+        Queue<Integer> q3 = new Queue<>();
+        
+        while (!q2.isEmpty())
+        {
+            int x = q2.remove();
+            if (!isIn(q3, x))
+                q3.insert(x);
+                
+            else
+                q2=deleteNum(q2, x);
+        }  
+        return q3; 
+    }
+    
+    public static Queue<Integer> level2_ex4(Queue<Integer> q1)
+    {
+        Queue<Integer> q2 = new Queue<>(); 
+        Queue<Integer> q3 = new Queue<>(); 
+
+        while (!q1.isEmpty())
+        {
+            int min = q1.remove();
+            q2.insert(min);
+            
+            while (!q1.isEmpty())
+            {
+                int x = q1.remove();
+                if (x < min) 
+                    min = x;
+                
+                q2.insert(v);
+            }
+
+            while (!q2.isEmpty())
+            {
+                int a = q2.remove();
+                if (a == min)
+                    q3.insert(a);
+                else
+                    q1.insert(a);
+            }
+        }
+        return q3;
+    }
+    
+    public static Queue<Integer> Level2_ex5(Queue<Integer> q1, Queue<Integer> q2)
+    {
+        Queue<Integer> q3 = copyQueue(q1);
+        Queue<Integer> q4 = copyQueue(q2);
+        Queue<Integer> q5 = new Queue<>();
+
+        while (!q3.isEmpty() && !q4.isEmpty())
+        {
+            int a = q3.head();
+            int b = q4.head();
+            
+            if (a <= b)
+                q5.insert(q3.remove());
+                
+            else
+                q5.insert(q4.remove());
+        }
+        
+        while (!q3.isEmpty())
+        { 
+            q5.insert(q3.remove());
+        }
+        
+        while (!q4.isEmpty())
+        { 
+            q5.insert(q4.remove());
+        }
+
+        return q5;
+    }
+    
+    public static int Level2_ex6(Queue<Integer> q1)
+    {
+        int a  =0;
+        int b = 0;
+        Queue<Integer> q2 = copyQueue(q1);
+        
+        while (!q2.isEmpty())
+        {
+            if (q2.remove()%2==0)
+                a++;
+                
+            else 
+            {
+                if (a>b)
+                    b=a;
+                
+                a=0;
+            } 
+        }
+        if (b==0)    
+            return a;
+        
+        return b;
     }
 }
